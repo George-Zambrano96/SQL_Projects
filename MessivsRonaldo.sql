@@ -41,18 +41,6 @@ WHERE Competition = 'UCL' AND average_Match_Rating < 8;
 
 
 
---Compare Average Goals per Competition to Goals per Competition per season in same table
-
-SELECT Player,Season, Goals, SUM(Goals)
-FROM MessivsRonaldo_Dataset
-WHERE Competition = 'League' AND Player = 'Messi'
-GROUP BY Player,Season, Goals 
-
-SELECT Player,Season, Goals, AVG(Goals) 
-FROM MessivsRonaldo_Dataset
-WHERE Competition = 'League' AND Player = 'Ronaldo'
-GROUP BY Player,Season, Goals
-
 
 
 -- Use CASE to assign Ratings depending on Goal_Assist Totals Per Season
@@ -86,6 +74,7 @@ FROM Average_Minutes_Played
 ORDER BY 3
 
 
+
 -- Find AVG Goals Per 90 and AVG Assists Per 90 when both players were playing in la liga 
 SELECT Player, AVG(Goals_per_90) as 'Average GP90', AVG(Assists_per_90) as 'Average AP90'
 FROM MessivsRonaldo_Dataset
@@ -93,3 +82,11 @@ WHERE Player = 'Messi' OR PLayer = 'Ronaldo'
 	AND Team = 'Barcelona' OR Team = 'Real Madrid'
 GROUP BY Player
 
+
+
+--Compare Goals per season to the average 
+SELECT Player, Season, Goals,
+	(SELECT AVG(Goals) FROM MessivsRonaldo_Dataset)
+FROM MessivsRonaldo_Dataset
+WHERE Competition = 'League'
+ORDER BY Season
